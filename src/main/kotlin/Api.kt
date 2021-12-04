@@ -10,7 +10,7 @@ import java.io.Reader
 object Api {
     private val token = System.getenv("TELEGRAM_TOKEN") ?: error("TELEGRAM_TOKEN not set")
     private val base = "https://api.telegram.org/bot$token/"
-    private const val botname = "twitter2stickerbot"
+    const val botname = "twitter2stickerbot"
 
     private val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
@@ -24,15 +24,19 @@ object Api {
 
     fun sendMessage(params: TSendMessageParams): TMessage? = sendRequest("sendMessage", params)
 
+    fun getStickerSet(params: TGetStickerSetParams): TStickerSet? = sendRequest("getStickerSet", params)
+
+    fun sendSticker(params: TSendStickerParams): TMessage? = sendRequest("sendSticker", params)
+
     fun createNewStickerSet(params: TCreateNewStickerSetParams): Boolean? {
         val request = Fuel.upload(base + "createNewStickerSet", Method.POST, listOf(
             "user_id" to params.userId,
-            "name" to params.name + "_by_$botname",
+            "name" to params.name,
             "title" to params.title,
             "emojis" to params.emojis))
             .add(BlobDataPart(params.pngSticker, "png_sticker", "image.png", contentType = "image/png"))
 
-        val result = getResponse<Boolean>(request)
+        val (_, result) = getResponse<Boolean>(request)
         if (result is Result.Failure) {
             println(result.error)
             return null
@@ -46,7 +50,7 @@ object Api {
         val request = Fuel.upload(base + "sendPhoto", Method.POST, listOf("chat_id" to chatId))
             .add(BlobDataPart(imageStream, "photo", "image.png", contentType = "image/png"))
 
-        val result = getResponse<TMessage>(request)
+        val (_, result) = getResponse<TMessage>(request)
         if (result is Result.Failure) {
             println(result.error)
             return null
@@ -65,8 +69,9 @@ object Api {
                 .body(serializedParams)
         }
 
-        val result = getResponse<ResultType>(request)
+        val (res, result) = getResponse<ResultType>(request)
         if (result is Result.Failure) {
+            println(res.body().asString("text/plain"))
             println(result.error)
             return null
         }
@@ -76,11 +81,11 @@ object Api {
     }
 
     /** Fuel does implement this in Fuel.gson, but for some reason it does not work there for me */
-    private inline fun <reified T: Any> getResponse(request: Request): Result<TResponse<T>, FuelError> {
+    private inline fun <reified T: Any> getResponse(request: Request): Pair<Response, Result<TResponse<T>, FuelError>> {
         val (ra, re, result) = request.response(object: ResponseDeserializable<TResponse<T>> {
             override fun deserialize(reader: Reader) = gson.fromJson<TResponse<T>>(reader, object: TypeToken<TResponse<T>>() {}.type)
         })
-        return result
+        return re to result
     }
 }
 

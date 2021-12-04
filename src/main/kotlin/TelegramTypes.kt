@@ -1,5 +1,6 @@
 import com.google.gson.annotations.SerializedName
 import java.io.InputStream
+import javax.management.monitor.StringMonitor
 
 data class TResponse<T>(
     val ok: Boolean,
@@ -70,4 +71,15 @@ data class TSendMessageParams(
     val chatId: Long,
     val text: String)
 
-data class TSendPhotoParams(val chatId: Long)
+data class TGetStickerSetParams(val name: String)
+
+data class TSticker(val fileId: String, )
+
+data class TStickerSet(
+    val name: String,
+    val title: String,
+    val stickers: List<TSticker>)
+
+data class TSendStickerParams(
+    val chatId: Long,
+    val sticker: String)

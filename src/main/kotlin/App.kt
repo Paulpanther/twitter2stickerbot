@@ -23,7 +23,7 @@ private fun onTextMessage(msg: TMessage) {
         Api.sendMessage(TSendMessageParams(chatId, "Cool title. Now send me the name of the Sticker Set"))
     } else if (data.currentStickerSetName == null) {
         val name = msg.text ?: return sendError(chatId, "Please send me text")
-        data.currentStickerSetName = name
+        data.currentStickerSetName = "${name}_by_${Api.botname}"
         Api.sendMessage(TSendMessageParams(chatId, "Noice. Lets create the first Sticker! Send me a twitter link"))
     } else if (data.currentImage == null) {
         val link = msg.text ?: return sendError(chatId, "Please send me text")
@@ -40,6 +40,10 @@ private fun onTextMessage(msg: TMessage) {
         val result = Api.createNewStickerSet(TCreateNewStickerSetParams(userId, data.currentStickerSetName!!, data.currentStickerSetTitle!!, data.currentImage!!.toInputStream(), emoji))
         if (result == null || !result) return sendError(chatId, "Could not create Sticker Set")
         Api.sendMessage(TSendMessageParams(chatId, "Successfully created the Sticker Set"))
+
+        val stickerSet = Api.getStickerSet(TGetStickerSetParams(data.currentStickerSetName!!)) ?: return sendError(chatId, "Could not get StickerSet")
+        val sticker = stickerSet.stickers.firstOrNull() ?: return sendError(chatId, "StickerSet is empty")
+        Api.sendSticker(TSendStickerParams(chatId, sticker.fileId))
     }
 }
 
