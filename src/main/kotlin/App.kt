@@ -1,3 +1,6 @@
+import java.io.File
+import javax.imageio.ImageIO
+
 //
 // Disclaimer: This Code was written mainly in under 3 Hours. Please don't judge me for it ;)
 //
@@ -90,10 +93,12 @@ private fun onTextMessage(msg: TMessage) {
 }
 
 fun main() {
-    println("Starting Telegram Bot")
-    MessageHandler {
-        onCommand("create_sticker_set", "Creates a new Sticker Set", ::onCreateStickerSet)
-        onCommand("create_sticker", "Creates a new Sticker for the current Set", ::onCreateSticker)
-        onTextMessage(::onTextMessage)
-    }
+//    println("Starting Telegram Bot")
+//    MessageHandler {
+//        onCommand("create_sticker_set", "Creates a new Sticker Set", ::onCreateStickerSet)
+//        onCommand("create_sticker", "Creates a new Sticker for the current Set", ::onCreateSticker)
+//        onTextMessage(::onTextMessage)
+//    }
+    val img = TwitterApi.imageFromLink("https://twitter.com/NaumannAntonius/status/1465716238496243714")
+    ImageIO.write(img, "png", File("out.png"))
 }
