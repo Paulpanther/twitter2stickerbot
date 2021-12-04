@@ -58,7 +58,7 @@ data class TCreateNewStickerSetParams(
 data class TAddStickerToSetParams(
     val userId: Long,
     val name: String,
-    val pngSticker: String,
+    val pngSticker: InputStream,
     val emojis: String)
 
 data class TBotCommand(

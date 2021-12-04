@@ -18,8 +18,6 @@ object Api {
 
     fun getUpdates(params: TUpdatesParams): List<TUpdate>? = sendRequest("getUpdates", params)
 
-    fun addStickerToSet(params: TAddStickerToSetParams): Boolean? = sendRequest("addStickerToSet", params)
-
     fun setMyCommands(params: TSetCommandsParams): Boolean? = sendRequest("setMyCommands", params)
 
     fun sendMessage(params: TSendMessageParams): TMessage? = sendRequest("sendMessage", params)
@@ -27,6 +25,23 @@ object Api {
     fun getStickerSet(params: TGetStickerSetParams): TStickerSet? = sendRequest("getStickerSet", params)
 
     fun sendSticker(params: TSendStickerParams): TMessage? = sendRequest("sendSticker", params)
+
+    fun addStickerToSet(params: TAddStickerToSetParams): Boolean? {
+        val request = Fuel.upload(base + "addStickerToSet", Method.POST, listOf(
+            "user_id" to params.userId,
+            "name" to params.name,
+            "emojis" to params.emojis))
+            .add(BlobDataPart(params.pngSticker, "png_sticker", "image.png", contentType = "image/png"))
+
+        val (_, result) = getResponse<Boolean>(request)
+        if (result is Result.Failure) {
+            println(result.error)
+            return null
+        }
+        val response = result.get()
+        if (!response.ok) return null
+        return response.result
+    }
 
     fun createNewStickerSet(params: TCreateNewStickerSetParams): Boolean? {
         val request = Fuel.upload(base + "createNewStickerSet", Method.POST, listOf(
