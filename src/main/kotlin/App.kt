@@ -32,6 +32,18 @@ private fun onCreateSticker(msg: TMessage) {
     Api.sendMessage(TSendMessageParams(chatId, "Please send me a Sticker of the Sticker-Pack you want to add a new Sticker too. (The pack has to been created by me and not another bot!)"))
 }
 
+private fun onCancel(msg: TMessage) {
+    val chatId = msg.chat.id
+    val userId = msg.from?.id ?: return sendError(chatId, "Error: Could not get user_id")
+    val data = UserDataStore[userId]
+    data.currentStickerSetName = null
+    data.currentStickerImage = null
+    data.currentStickerEmoji = null
+    data.currentStickerSetTitle = null
+    data.creationState = null
+    Api.sendMessage(TSendMessageParams(chatId, "Successfully canceled"))
+}
+
 private fun onTextMessage(msg: TMessage) {
     val chatId = msg.chat.id
     val userId = msg.from?.id ?: return sendError(chatId, "Error: Could not get user_id")
@@ -101,6 +113,7 @@ fun main() {
     MessageHandler {
         onCommand("create_sticker_set", "Creates a new Sticker Set", ::onCreateStickerSet)
         onCommand("create_sticker", "Creates a new Sticker for the current Set", ::onCreateSticker)
+        onCommand("cancel", "Cancels the current changes and resets the session", ::onCancel)
         onTextMessage(::onTextMessage)
     }
 //    val img = TwitterApi.imageFromLink("https://twitter.com/NaumannAntonius/status/1465716238496243714")
