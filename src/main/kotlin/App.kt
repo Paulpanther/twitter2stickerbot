@@ -25,11 +25,11 @@ private fun onCreateSticker(msg: TMessage) {
     val chatId = msg.chat.id
     val userId = msg.from?.id ?: return sendError(chatId, "Error: Could not get user_id")
     val data = UserDataStore[userId]
-    data.currentStickerSetName ?: return sendError(chatId, "You have to create a Sticker Set first")
+    data.currentStickerSetName = null
     data.currentStickerImage = null
     data.currentStickerEmoji = null
     data.creationState = CreationState.Sticker
-    Api.sendMessage(TSendMessageParams(chatId, "Please send me the Tweet-Link for the Sticker"))
+    Api.sendMessage(TSendMessageParams(chatId, "Please send me a Sticker of the Sticker-Pack you want to add a new Sticker too. (The pack has to been created by me and not another bot!)"))
 }
 
 private fun onTextMessage(msg: TMessage) {
@@ -68,13 +68,17 @@ private fun onTextMessage(msg: TMessage) {
             data.creationState = null
         }
     } else if (data.creationState == CreationState.Sticker) {
-        if (data.currentStickerImage == null) {
+        if (data.currentStickerSetName == null) {
+            val sticker = msg.sticker ?: return sendError(chatId, "You need to send me a sticker")
+            data.currentStickerSetName = sticker.setName ?: return sendError(chatId, "Could not get name of Sticker-Set, try a different Sticker")
+            val stickerSet = Api.getStickerSet(TGetStickerSetParams(data.currentStickerSetName!!))
+            Api.sendMessage(TSendMessageParams(chatId, if (stickerSet != null) "Now send me the Tweet-Link to add to ${stickerSet.title}" else "Now send me the Tweet-Link"))
+        } else if (data.currentStickerImage == null) {
             val link = msg.text ?: return sendError(chatId, "Please send me text")
             val image = TwitterApi.imageFromLink(link) ?: return sendError(chatId, "Could not create Image from Link")
 
             Api.sendMessage(TSendMessageParams(chatId, "Awesome. Here's a preview of the generated Image"))
-            val photoMsg = Api.sendPhoto(chatId, image.toInputStream())
-            val photoId = photoMsg?.photo?.firstOrNull()?.fileId ?: return sendError(chatId, "Could not get Photo Id")
+            Api.sendPhoto(chatId, image.toInputStream())
             data.currentStickerImage = image
             Api.sendMessage(TSendMessageParams(chatId, "Please send me the emoji for this Sticker next"))
         } else if (data.currentStickerEmoji == null) {
@@ -93,12 +97,12 @@ private fun onTextMessage(msg: TMessage) {
 }
 
 fun main() {
-//    println("Starting Telegram Bot")
-//    MessageHandler {
-//        onCommand("create_sticker_set", "Creates a new Sticker Set", ::onCreateStickerSet)
-//        onCommand("create_sticker", "Creates a new Sticker for the current Set", ::onCreateSticker)
-//        onTextMessage(::onTextMessage)
-//    }
-    val img = TwitterApi.imageFromLink("https://twitter.com/NaumannAntonius/status/1465716238496243714")
-    ImageIO.write(img, "png", File("out.png"))
+    println("Starting Telegram Bot")
+    MessageHandler {
+        onCommand("create_sticker_set", "Creates a new Sticker Set", ::onCreateStickerSet)
+        onCommand("create_sticker", "Creates a new Sticker for the current Set", ::onCreateSticker)
+        onTextMessage(::onTextMessage)
+    }
+//    val img = TwitterApi.imageFromLink("https://twitter.com/NaumannAntonius/status/1465716238496243714")
+//    ImageIO.write(img, "png", File("out.png"))
 }

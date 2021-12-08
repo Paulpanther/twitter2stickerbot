@@ -32,10 +32,10 @@ class MessageHandler(listenerBuilder: MessageHandlerBuilder.() -> Unit) {
             val updates = Api.getUpdates(TUpdatesParams(nextUpdate)) ?: continue
             for (update in updates) {
                 val msg = update.message ?: continue
-                val text = msg.text ?: continue
                 val entity = msg.entities?.firstOrNull()
 
                 if (entity != null && entity.type == TMessageEntityType.BotCommand) {
+                    val text = msg.text ?: continue
                     val commandStr = text.substring(entity.offset, entity.offset + entity.length)
                     val command = commands.find { "/${it.command}" == commandStr } ?: continue
                     command.action(msg)

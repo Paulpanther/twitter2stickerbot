@@ -36,7 +36,8 @@ data class TMessage(
     val date: Int,
     val text: String?,
     val entities: List<TMessageEntity>?,
-    val photo: List<TPhoto>?)
+    val photo: List<TPhoto>?,
+    val sticker: TSticker?)
 
 data class TUpdate(
     val updateId: Long,
@@ -73,7 +74,7 @@ data class TSendMessageParams(
 
 data class TGetStickerSetParams(val name: String)
 
-data class TSticker(val fileId: String, )
+data class TSticker(val fileId: String, val setName: String?)
 
 data class TStickerSet(
     val name: String,
