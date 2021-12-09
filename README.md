@@ -1,5 +1,6 @@
 # twitter2stickerbot
-Creates Telegram Stickers from Twitter Posts
+[![Try it on telegram](https://img.shields.io/badge/try%20it-on%20telegram-0088cc.svg)](http://t.me/Twitter2StickerBot)
+
 
 ## How to use
 1. Send `/start` to [the Bot](https://t.me/twitter2telegrambot)
