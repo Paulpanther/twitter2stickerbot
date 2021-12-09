@@ -13,6 +13,7 @@ data class TUser(
     val username: String,
     val canJoinGroups: Boolean,
     val canReadAllGroupMessages: Boolean,
+    val languageCode: String?,
     val supportsInlineQueries: Boolean)
 
 data class TChat(val id: Long)

@@ -1,0 +1,24 @@
+{
+  "en": {
+  },
+  "de": {
+    "errorGeneral": "Es ist ein Fehler aufgetreten. Ich konnte deine Anfrage leider nicht bearbeiten",
+    "errorNoText": "Ich habe hier eigentlich eine reine Text-Nachricht erwartet. Bitte versuche es nochmal",
+    "errorNoSticker": "Ich habe hier eigentlich einen Sticker erwartet. Bitte versuche es nochmal",
+    "errorNoStickerSetName": "Beim Lesen das Sticker-Pakets ist ein Fehler aufgetreten. Versuche vielleicht einen anderen Sticker",
+    "errorGenerateImage": "Leider konnte ich von dem Twitter-Link kein Bild generieren. Versuche vielleicht mal einen anderen Link?",
+    "errorCreatingSticker": "Beim Erstellen des Stickers ist leider ein Fehler passiert",
+    "errorNoStickersInSet": "Leider ist beim Senden des Stickers ein Fehler aufgetreten",
+    "requestStickerSetTitle": "Super, lass uns ein neues Sticker-Paket kreieren. Wie soll es den heißen?",
+    "requestStickerOfStickerSetToAddTo": "Lass uns einen Sticker machen! Ich bräuchte dafür noch einen bestehenden Sticker vom Sticker-Paket zu dem der neue Sticker hinzugefügt werden soll. Wichtig: Das Sticker-Paket muss von mir erstellt worden sein, sonst funktioniert es leider nicht",
+    "requestStickerTwitterLink": "Ein wunderschöner Titel! Du kannst mir jetzt den Twitter-Link schicken, aus dem der Sticker generiert werden soll. Der Link muss auf einen einzelnen Tweet zeigen, welcher nur Text enthält.",
+    "requestStickerEmoji": "Als letztes brauche ich noch ein Emoji für den Sticker",
+    "imageGenerationSuccess": "Genial! Hier ist eine Vorschau vom generierten Bild",
+    "cancelSuccess": "Abbruch bestätigt!",
+    "stickerSuccess": "Sticker erfolgreich erstellt! Viel Spaß damit",
+    "commandCreateStickerSet": "Erstellt ein neues Sticker-Paket",
+    "commandCreateSticker": "Erstellt einen neuen Sticker",
+    "commandCancel": "Bricht den momentanen Vorgang ab",
+    "commandStart": "Hey, ich bin der Twitter2StickerBot. Ich helfe dir Sticker von Tweets herzustellen. Leider kann ich nur von mir selbst kreierte Sticker-Pakete bearbeiten. Du kannst allerdings mich ein Paket erstellen lassen, Tweet-Sticker hinzufügen und dann vom Telegram-Sticker-Bot weitere Sticker hinzufügen lassen."
+  }
+}
